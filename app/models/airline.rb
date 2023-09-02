@@ -1,3 +1,15 @@
-class Airline < ApplicationRecord
+  class Airline < ApplicationRecord
     has_many :reviews
-end
+  
+    before_create :slugify
+  
+    def slugify
+      self.slug = name.parameterize # It convert airline name into slug format
+    end
+  
+    def avg_score
+      return 0 unless reviews.size.positive?
+  
+      reviews.average(:score).to_f.round(2)
+    end
+  end
